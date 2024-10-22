@@ -63,7 +63,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
          <li class="col-4 d-flex gap-2 align-items-center justify-content-end">
 
-            <a href="register.php" class="btn btn-light">Register</a>
+            <a href="./pages/register.php" class="btn btn-light">Register</a>
 
             <a href="./pages/login.php" class="btn btn-light">LogIn</a>
 
