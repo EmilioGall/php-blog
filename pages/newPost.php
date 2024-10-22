@@ -102,7 +102,6 @@ $categories = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="mb-3">
 
                 <label for="title" class="form-label">Title</label>
-
                 <input type="text" class="form-control" id="title" name="title" required>
 
             </div>
@@ -110,7 +109,6 @@ $categories = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="mb-3">
 
                 <label for="content" class="form-label">Content</label>
-
                 <textarea class="form-control" id="content" name="content" required></textarea>
 
             </div>
@@ -118,7 +116,6 @@ $categories = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="mb-3">
 
                 <label for="category_id" class="form-label">Category</label>
-
                 <select class="form-select" id="category_id" name="category_id" required>
 
                     <?php foreach ($categories as $category): ?>
@@ -134,7 +131,6 @@ $categories = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="mb-3">
 
                 <label for="image" class="form-label">Image</label>
-
                 <input type="file" class="form-control" id="image" name="image" accept="image/*">
 
             </div>

@@ -69,7 +69,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
          <li class="col-4 d-flex align-items-center justify-content-end">
 
-            <a href="./pages/logout.php" class="btn btn-light">Logout</a>
+            <a href="./logout.php" class="btn btn-light">Logout</a>
 
          </li>
 

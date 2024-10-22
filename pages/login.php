@@ -96,7 +96,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="form-floating mb-3">
 
                <input type="text" class="form-control" id="username" placeholder="Username" name="username" required>
-
                <label for="username">Username</label>
 
             </div>
@@ -105,6 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                <input type="password" class="form-control" id="password" placeholder="Password" name="password" required>
                <label for="password">Password</label>
+               
             </div>
 
             <button type="submit" class="btn btn-primary">Log In</button>
