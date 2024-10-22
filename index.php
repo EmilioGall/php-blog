@@ -14,6 +14,7 @@ $stmt = $connection->prepare(
 
 $stmt->execute();
 
+// Define variable of the array of all posts
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
@@ -60,11 +61,11 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
          </li>
 
-         <li class="col-4 d-flex align-items-center justify-content-end">
-
-            <a href="login.php" class="btn btn-light">Log In</a>
+         <li class="col-4 d-flex gap-2 align-items-center justify-content-end">
 
             <a href="register.php" class="btn btn-light">Register</a>
+
+            <a href="./pages/login.php" class="btn btn-light">LogIn</a>
 
          </li>
 
@@ -76,17 +77,21 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
    <!-- Main -->
    <main class="container">
 
-      <div class="row justify-content-center">
+      <div class="row g-3 justify-content-center mx-5">
 
          <?php foreach ($posts as $post): ?>
 
-            <div class="col-12 mb-4">
+            <div class="col-12 d-flex justify-content-center">
 
-               <div class="card">
+               <div class="card w-50">
 
                   <?php if ($post['image']): ?>
 
                      <img src="<?= htmlspecialchars($post['image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($post['title']) ?>">
+
+                  <?php elseif (!$post['image']): ?>
+
+                     <img src="https://placehold.co/600x400?text=Placeholder\nImage" class="card-img-top" alt="Placeholder">
 
                   <?php endif; ?>
 
@@ -94,7 +99,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                      <h5 class="card-title"><?= htmlspecialchars($post['title']) ?></h5>
 
-                     <p class="card-text"><?= htmlspecialchars(substr($post['content'], 0, 100)) . '...' ?></p>
+                     <p class="card-text"><?= htmlspecialchars(substr($post['content'], 0, 50)) . '...' ?></p>
 
                      <p class="card-text"><small class="text-muted">Category: <?= htmlspecialchars($post['category_name']) ?> | Author: <?= htmlspecialchars($post['username']) ?></small></p>
 
@@ -113,13 +118,6 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
    </main>
    <!-- /Main -->
 
-   <!-- Footer -->
-   <footer class="container p-4 mb-3 rounded rounded-4">
-
-      <h5 class="text-light m-0">Footer</h5>
-
-   </footer>
-   <!-- /Footer -->
 </body>
 
 </html>
