@@ -2,30 +2,38 @@
 
 session_start();
 
-require './partials/database.php';
+require '../partials/database.php';
 
-// Fetch all posts
+// Redirect if not logged in
+if (!isset($_SESSION['user_id'])) {
+
+   header("Location: login.php");
+
+   exit();
+
+   // -
+}
+
+// Fetch user's posts
+$user_id = $_SESSION['user_id'];
+
 $stmt = $connection->prepare(
-   "SELECT posts.*, users.username, categories.name AS category_name 
+   "SELECT posts.*, categories.name AS category_name 
                         FROM posts 
-                        JOIN users ON posts.user_id = users.id 
-                        JOIN categories ON posts.category_id = categories.id"
+                        JOIN categories ON posts.category_id = categories.id 
+                        WHERE posts.user_id = ?"
 );
 
-$stmt->execute();
+$stmt->execute([$user_id]);
 
-// Define variable of the array of all posts
+// Define variable of the array of all posts of the user
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-// echo '<pre style="background: #DEDEDE; color: #484848;">';
-// var_dump($posts);
-// echo '</pre>';
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 
 <head>
 
@@ -33,7 +41,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
    <!-- Link fav Icon -->
-   <link rel="icon" type="image/svg+xml" href="./img/favicon.ico" />
+   <link rel="icon" type="image/svg+xml" href="../img/favicon.ico" />
 
    <!-- Link Bootstrap -->
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -42,9 +50,9 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
    <!-- Link Custom Style -->
-   <link rel="stylesheet" href="./css/style.css">
+   <link rel="stylesheet" href="../css/style.css">
 
-   <title>PHP MyBlog - Home</title>
+   <title>PHP MyBlog - Dashboard</title>
 
 </head>
 
@@ -61,11 +69,9 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
          </li>
 
-         <li class="col-4 d-flex gap-2 align-items-center justify-content-end">
+         <li class="col-4 d-flex align-items-center justify-content-end">
 
-            <a href="register.php" class="btn btn-light">Register</a>
-
-            <a href="./pages/login.php" class="btn btn-light">LogIn</a>
+            <a href="./pages/logout.php" class="btn btn-light">Logout</a>
 
          </li>
 
@@ -77,13 +83,17 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
    <!-- Main -->
    <main class="container">
 
-      <div class="row g-3 justify-content-center mx-5">
+      <h2>Your Posts</h2>
+
+      <a href="newPost.php" class="btn btn-primary mb-3">Create New Post</a>
+
+      <div class="row">
 
          <?php foreach ($posts as $post): ?>
 
-            <div class="col-12 d-flex justify-content-center">
+            <div class="col-12 mb-4">
 
-               <div class="card w-50">
+               <div class="card">
 
                   <?php if ($post['image']): ?>
 
@@ -99,11 +109,13 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                      <h5 class="card-title"><?= htmlspecialchars($post['title']) ?></h5>
 
-                     <p class="card-text"><?= htmlspecialchars(substr($post['content'], 0, 50)) . '...' ?></p>
+                     <p class="card-text"><?= htmlspecialchars(substr($post['content'], 0, 100)) . '...' ?></p>
 
-                     <p class="card-text"><small class="text-muted">Category: <?= htmlspecialchars($post['category_name']) ?> | Author: <?= htmlspecialchars($post['username']) ?></small></p>
+                     <p class="card-text"><small class="text-muted">Category: <?= htmlspecialchars($post['category_name']) ?></small></p>
 
-                     <a href="view_post.php?id=<?= $post['id'] ?>" class="btn btn-primary">Read More</a>
+                     <a href="updatePost.php?id=<?= $post['id'] ?>" class="btn btn-warning">Edit</a>
+
+                     <a href="deletePost.php?id=<?= $post['id'] ?>" class="btn btn-danger">Delete</a>
 
                   </div>
 

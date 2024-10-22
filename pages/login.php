@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
       $_SESSION['user_id'] = $user['id'];
 
-      header("Location: dashboard.php");
+      header("Location: ./dashboard.php");
 
       exit();
 
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
    <!-- Link Custom Style -->
    <link rel="stylesheet" href="../css/style.css">
 
-   <title>PHP MyBlog</title>
+   <title>PHP MyBlog - Login</title>
 
 </head>
 
