@@ -93,7 +93,7 @@ $categories = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- /Header -->
 
     <!-- Main -->
-    <main class="container mt-5">
+    <main class="container">
 
         <h2>Create New Post</h2>
 
