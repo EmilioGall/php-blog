@@ -7,12 +7,10 @@ require '../partials/database.php';
 // Redirect if not logged in
 if (!isset($_SESSION['user_id'])) {
 
-   header("Location: login.php");
+   header("Location: ../index.php");
 
    exit();
-
-   // -
-}
+};
 
 // Fetch user's posts
 $user_id = $_SESSION['user_id'];
@@ -85,7 +83,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
       <h2>Your Posts</h2>
 
-      <a href="newPost.php" class="btn btn-primary mb-3">Create New Post</a>
+      <a href="./newPost.php" class="btn btn-primary mb-3">Create New Post</a>
 
       <div class="row">
 
@@ -113,9 +111,9 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                      <p class="card-text"><small class="text-muted">Category: <?= htmlspecialchars($post['category_name']) ?></small></p>
 
-                     <a href="updatePost.php?id=<?= $post['id'] ?>" class="btn btn-warning">Edit</a>
+                     <a href="./updatePost.php?id=<?= $post['id'] ?>" class="btn btn-warning">Edit</a>
 
-                     <a href="deletePost.php?id=<?= $post['id'] ?>" class="btn btn-danger">Delete</a>
+                     <a href="./deletePost.php?id=<?= $post['id'] ?>" class="btn btn-danger">Delete</a>
 
                   </div>
 
