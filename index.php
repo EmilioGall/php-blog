@@ -220,7 +220,7 @@ $categories = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
 
                   <?php if ($post['image']): ?> <!-- Check if the post has an image -->
 
-                     <img src="<?= htmlspecialchars($post['image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($post['title']) ?>">
+                     <img src="<?= $post['image'] ?>" class="card-img-top" alt="<?= htmlspecialchars($post['title']) ?>">
 
                   <?php elseif (!$post['image']): ?> <!-- Placeholder image if no image exists -->
 
