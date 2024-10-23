@@ -1,17 +1,14 @@
 <?php
 
-// Database configuration
-
-use function PHPSTORM_META\type;
-
-$host = "localhost"; // your database host
-$db = "php_blog"; // your database name
-$user = "root"; // your database username
-$password = "root"; // your database password
+require 'config.php';
 
 try {
 
-   $connection = new PDO("mysql:host=$host;dbname=$db;", $user, $password);
+   // Define DSN (Data Source Name) string
+   $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
+
+   // Create a new PDO instance
+   $connection = new PDO($dsn, $user, $password);
 
    // set the PDO error mode to exception
    $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -20,8 +17,19 @@ try {
 
    // -
 } catch (PDOException $e) {
+   // Exception handling for connection errors
 
-   echo "Connection failed: " . $e->getMessage();
+   // Technical message for debugging
+   echo '<pre style="background: #DEDEDE; color: #484848;">';
+   var_dump($e->getMessage(), (int)$e->getCode());
+   echo '</pre>';
 
-   exit();
+   // Log the error details to server error log
+   error_log("Database connection failed: " . $e->getMessage());
+
+   // Generic user-friendly message
+   echo "Connection to the database failed. Please try again later.";
+
+   // Throw the exception if further handling is needed
+   throw new PDOException("Database connection error.", (int)$e->getCode());
 };
