@@ -1,7 +1,9 @@
 <?php
 
+// Start SESSION
 session_start();
 
+// Include the database connection script
 require '../partials/database.php';
 
 // Redirect if not logged in
@@ -12,8 +14,10 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 };
 
+// Checks if the request method is POST, meaning the form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    // Form field values
     $title = $_POST['title'];
     $content = $_POST['content'];
     $user_id = $_SESSION['user_id'];
@@ -22,12 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Handle image upload
     $target_dir = "../img/posts-images/";
 
+    // Create full path for the uploaded image
     $target_file = $target_dir . basename($_FILES["image"]["name"]);
 
+    // Move uploaded image from its temporary location to the target directory
     move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
 
+    // Prepares a SQL statement to insert a new post
     $stmt = $connection->prepare(
+
         "INSERT INTO posts (title, content, user_id, category_id, image) VALUES (?, ?, ?, ?, ?)"
+
     );
 
     $stmt->execute([$title, $content, $user_id, $category_id, $target_file]);
