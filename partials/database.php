@@ -21,7 +21,15 @@ try {
 
    // Technical message for debugging
    echo '<pre style="background: #DEDEDE; color: #484848;">';
-   var_dump($e->getMessage(), (int)$e->getCode());
+   var_dump('Message:', $e->getMessage());
+   echo '</pre>';
+
+   echo '<pre style="background: #DEDEDE; color: #484848;">';
+   var_dump('Code:', $e->getCode());
+   echo '</pre>';
+
+   echo '<pre style="background: #DEDEDE; color: #484848;">';
+   var_dump('Line:', $e->getLine());
    echo '</pre>';
 
    // Log the error details to server error log
@@ -30,6 +38,6 @@ try {
    // Generic user-friendly message
    echo "Connection to the database failed. Please try again later.";
 
-   // Throw the exception if further handling is needed
-   throw new PDOException("Database connection error.", (int)$e->getCode());
+   // Prevent further script execution
+   exit();
 };
