@@ -10,6 +10,9 @@ session_start();
 // Include the database connection script
 require './partials/database.php';
 
+// Create direction for the images
+$target_dir = "./img/posts-images/";
+
 // Initialize filter variables
 $authorFilter = isset($_POST['author']) ? $_POST['author'] : 'all';
 $categoryFilter = isset($_POST['category']) ? $_POST['category'] : 0;
@@ -23,7 +26,7 @@ $categoryFilter = isset($_POST['category']) ? $_POST['category'] : 0;
 // echo '</pre>';
 
 // Prepare the SQL query statement
-$sql = "SELECT *, users.username, categories.name AS category_name 
+$sql = "SELECT posts.*, users.username, categories.name AS category_name 
         FROM posts 
         JOIN users ON posts.user_id = users.id 
         JOIN categories ON posts.category_id = categories.id";
@@ -218,9 +221,10 @@ $categories = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
 
                <div class="card w-50">
 
+                  <!-- Post Image -->
                   <?php if ($post['image']): ?> <!-- Check if the post has an image -->
 
-                     <img src="<?= $post['image'] ?>" class="card-img-top" alt="<?= htmlspecialchars($post['title']) ?>">
+                     <img src="<?= $target_dir . htmlspecialchars($post['image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($post['title']) ?>">
 
                   <?php elseif (!$post['image']): ?> <!-- Placeholder image if no image exists -->
 
@@ -240,7 +244,7 @@ $categories = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
                      <p class="card-text"><small class="text-muted">Category: <?= htmlspecialchars($post['category_name']) ?> | Author: <?= htmlspecialchars($post['username']) ?></small></p>
 
                      <!-- Post Details Link -->
-                     <a href="view_post.php?id=<?= $post['id'] ?>" class="btn btn-primary">Read More</a>
+                     <a href="./pages/singlePost.php?id=<?= $post['id'] ?>" class="btn btn-primary">Read More</a>
 
                   </div>
 
