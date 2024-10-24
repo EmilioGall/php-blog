@@ -14,6 +14,9 @@ if (!isset($_SESSION['user_id'])) {
    exit();
 };
 
+// Create direction for the images
+$target_dir = "../img/posts-images/";
+
 // Fetch user's posts //
 
 // Retrieves the user ID from the session
@@ -21,7 +24,7 @@ $user_id = $_SESSION['user_id'];
 
 // Use a JOIN query to get the related category names from the categories table.
 $stmt = $connection->prepare(
-   "SELECT *, categories.name AS category_name 
+   "SELECT posts.*, categories.name AS category_name 
                         FROM posts 
                         JOIN categories ON posts.category_id = categories.id 
                         WHERE posts.user_id = ?" // Filters posts by the logged-in user ID.
@@ -111,7 +114,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <?php if ($post['image']): ?> <!-- Check if the post has an image -->
 
                      <!-- Display post image -->
-                     <img src="<?= htmlspecialchars($post['image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($post['title']) ?>">
+                     <img src="<?= $target_dir . htmlspecialchars($post['image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($post['title']) ?>">
 
                   <?php elseif (!$post['image']): ?> <!-- Placeholder image if no image exists -->
 
