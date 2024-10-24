@@ -24,10 +24,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $category_id = $_POST['category_id'];
 
     // Handle image upload
+
+    // Create direction for the uploaded image
     $target_dir = "../img/posts-images/";
 
+    // Create name for the uploaded image
+    $target_name = basename($_FILES["image"]["name"]);
+
     // Create full path for the uploaded image
-    $target_file = $target_dir . basename($_FILES["image"]["name"]);
+    $target_file = $target_dir . $target_name;
 
     // Move uploaded image from its temporary location to the target directory
     move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
@@ -39,8 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     );
 
-    $stmt->execute([$title, $content, $user_id, $category_id, $target_file]);
+    // Execute the query by passing the new post parameters
+    $stmt->execute([$title, $content, $user_id, $category_id, $target_name]);
 
+    // Redirect to Dashboard
     header("Location: ./dashboard.php");
 
     exit();
