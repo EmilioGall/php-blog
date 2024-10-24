@@ -25,23 +25,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Handle image upload
 
-    // Create direction for the uploaded image
-    $target_dir = "../img/posts-images/";
+    if (!empty($_FILES['image']['name'])) {
 
-    // Create name for the uploaded image
-    $target_name = basename($_FILES["image"]["name"]);
+        // Create direction for the uploaded image
+        $target_dir = "../img/posts-images/";
 
-    // Create full path for the uploaded image
-    $target_file = $target_dir . $target_name;
+        // Create name for the uploaded image
+        $target_name = basename($_FILES["image"]["name"]);
 
-    // Move uploaded image from its temporary location to the target directory
-    move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
+        // Create full path for the uploaded image
+        $target_file = $target_dir . $target_name;
+
+        // Move uploaded image from its temporary location to the target directory
+        move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
+    };
 
     // Prepares a SQL statement to insert a new post
     $stmt = $connection->prepare(
-
         "INSERT INTO posts (title, content, user_id, category_id, image) VALUES (?, ?, ?, ?, ?)"
-
     );
 
     // Execute the query by passing the new post parameters

@@ -12,6 +12,9 @@ if (!isset($_SESSION['user_id'])) {
    exit();
 };
 
+// Create direction for the images
+$target_dir = "../img/posts-images/";
+
 // Fetch the post and categories
 $post_id = $_GET['id'];
 
@@ -40,26 +43,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
    $content = $_POST['content'];
    $category_id = $_POST['category_id'];
 
+   $image_changed = false;
+
    // Handle image upload, if a new image is provided
-   $target_file = $post['image'];
+   $target_name = $post['image'];
+
+   echo '<pre style="background: #DEDEDE; color: #484848;">';
+   var_dump($post['image']);
+   echo '</pre>';
 
    if (!empty($_FILES['image']['name'])) {
 
+      // Create direction for the uploaded image
       $target_dir = "../img/posts-images/";
 
-      $target_file = $target_dir . basename($_FILES["image"]["name"]);
+      // Create name for the uploaded image
+      $target_name = basename($_FILES["image"]["name"]);
+
+      // Create full path for the uploaded image
+      $target_file = $target_dir . $target_name;
 
       move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
+
+      $image_changed = true;
    };
 
+   // Prepares a SQL statement to update post
    $stmt = $connection->prepare(
       "UPDATE posts SET title = ?, content = ?, category_id = ?, image = ? WHERE id = ?"
    );
 
-   $stmt->execute([$title, $content, $category_id, $target_file, $post_id]);
+   // Execute the query by passing the updated post parameters
+   $stmt->execute([$title, $content, $category_id, $target_name, $post_id]);
 
-   header("Location: dashboard.php");
+   echo '<pre style="background: #DEDEDE; color: #484848;">';
+   var_dump('Post Update', $_POST['update_post']);
+   echo '</pre>';
 
+   // Determine where to redirect based on whether the image changed
+   if ($image_changed) {
+
+      // Form submitted due to image change
+      header("Location: updatePost.php?id=" . $post_id);
+   } else {
+
+      // Form submitted by button click
+      header("Location: dashboard.php");
+   };
+   
    exit();
 };
 
@@ -149,12 +180,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
          <div class="mb-3">
 
             <label for="image" class="form-label">Image</label>
-            <input type="file" class="form-control" id="image" name="image" accept="image/*">
-            <img src="<?= $post['image'] ? htmlspecialchars($post['image']) : 'https://placehold.co/600x400?text=Placeholder\nImage' ?>" alt="Current Image" class="img-fluid mt-2" style="max-width: 200px;">
+            <input type="file" class="form-control" id="image" name="image" accept="image/*" onchange="this.form.submit();">
+            <img src="<?= $post['image'] ? $target_dir . htmlspecialchars($post['image']) : 'https://placehold.co/600x400?text=Placeholder\nImage' ?>" alt="Current Image" class="img-fluid mt-2" style="max-width: 200px;">
 
          </div>
 
-         <button type="submit" class="btn btn-primary">Update Post</button>
+         <button type="submit" name="update_post" class="btn btn-primary">Update Post</button>
 
       </form>
 
